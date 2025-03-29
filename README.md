@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+ ---------------------------------------------------- E X P O R T  M E T H O D S-------------------------------------------------
 
-First, run the development server:
+ we have two methods to export -> module.export and export ( es6 )
+ 1- module.exports = {userModel,messageModle}  ||  module.exports = {Users:userModel,Messages:messageModle}
+ 2- export {userModel,messageModle}   || export {userModel as Users,messageModle as Messages}
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ how to import them 
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+ - in case of the module.exports
+ const { userModle , messageModle } = require('./model/user.ts')  ||   const { Users , Messages } = require('./model/user.ts') ||  const { userModle: Users , messageModle: Messages } = require('./model/user.ts') 
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+- in case of the export
+ import {userModel,messageModel} from './model/user.ts' || import {Users,Messages} from './model/user.ts' || import {userModel as Users,messageModel as Messages} from './model/user.ts'
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ --------------------------------------------- C O N S T R A I N T S   I N   M O N G O O S E  ----------------------------------------------
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+ - type    => defined the type of the field at the defination, when different type input is given then automatically converted to given type  
+ - required => mandatory field , error while creating or saving the document, can catch error in try-catch block
+ - unique   => needs to be unique ,  error while creating or saving the document, can catch error in try-catch block 
+ - default  => sets the default value of the field
+ - enum     => defined the set of value that can be filled for a field, if any other value if filled -> error -> creating or saving or updating
+ - minlength => sets the minimul length for the field -> error at creation or saving or updating
+ - MaxLength => sets the maximum length for the field -> error at creation or saving or updating
+ - min  =>   sets the minimal value in number that can be added 
+ - max  => sets the maximum value in number that can be added
+ - match => used to match the regex -> can be used at creation, updation , finding , deletion 
+ - immutable  => can not be updated
+ - select  => when false the field will be automatically hidden when the document is fetched
+ - ref  => tells the the primary field for which it is acting a foreign field => used in .populate()
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+ --------------------------------- W H Y   Z O D   I F   H A V E   C O N S T A I N T S    I N    M O N G O O S E ? ------------------------------
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Even though Mongoose provides schema validation, Zod offers additional benefits, especially for input validation before it reaches the database
+
+- The invalid data reaches the database layer before being rejected.
+- This can cause unnecessary database operations and bad user experience.
+
+- Bad data is caught before reaching MongoDB → Saves database operations
+- Better error handling & custom messages
+- Improved security & performance
+
+
+---------------------------------------------  H O W    T O    U S E    Z O D    V A L I D A T I O N -------------------------------------------
+
