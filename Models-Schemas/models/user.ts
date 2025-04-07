@@ -44,7 +44,7 @@ const messageSchema: Schema<MessageInterface> = new Schema({
 // models contains all the models that are already created in the application
 // if the model is already created then use that model otherwise create a new model and use that
 // this is done to avoid multiple creation of the same model due to hot reloading in development mode
-const userModel = models.users || model<UserInterface>("users", userSchema);
+const  userModel = models.users || model<UserInterface>("users", userSchema);
 const messageModel = models.messages || model<MessageInterface>("messages", messageSchema);
 
 export { userModel as Users, messageModel as Messages };

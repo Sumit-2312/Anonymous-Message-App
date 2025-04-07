@@ -6,8 +6,9 @@ const OTPValidation = z
     .max(6,{message:"OTP should  be of maximum 6 characters"})
 
 
+const emailValidation = z.string().email()
 
-
-export  const acceptMessageSchema = z.object({
-   OTP : OTPValidation
+export  const verifySchema = z.object({
+   OTP : OTPValidation,
+   email : emailValidation
 })

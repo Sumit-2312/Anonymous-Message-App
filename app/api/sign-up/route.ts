@@ -6,7 +6,7 @@ import SendMail from "@/helpers/resendSendOTP";
 
 
 // NextResponse provide additional features over the native Response class of nextjs, it actually extens the Request API and provided additional features over Request
-export  async function POST(request: NextRequest){
+export async function POST(request: NextRequest){
 
     // two cases could be there 
     // 1- the user is already signup 
@@ -53,9 +53,21 @@ export  async function POST(request: NextRequest){
             password
         })
 
+        // After creating the user we will send the OTP to the user at their respective gmail and ask them to verify using the OTP
+
+
+        const {error,data} = await SendMail(username,email);
+        if( error ){
+            return NextResponse.json({
+                 success: false,
+                 message: "Error while sending Email. Please try again later!",
+                 error : error
+             })
+         }
+
       return  NextResponse.json({
             success: true,
-            message: "You are signed up! Please login now"
+            message: "Email is sent to your gmail please verify!"
         })
     }
     // following code will run if the users data is already present in the database
@@ -72,12 +84,12 @@ export  async function POST(request: NextRequest){
         // here we need to send the OTP to the email of the user provided by him
         // this could be done by the help of resend Email which allows to send the email 
 
-
         const {error,data} = await SendMail(username,email);
         if( error ){
            return NextResponse.json({
                 success: false,
-                message: "Error while sending Email. Please try again later!"
+                message: "Error while sending Email. Please try again later!",
+                error : error
             })
         }
 
@@ -86,5 +98,5 @@ export  async function POST(request: NextRequest){
             message: "Email is sent! Please verify to continue"
         })
     }
-    
+
 }
